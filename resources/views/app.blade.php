@@ -41,8 +41,7 @@
             href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800|jetbrains-mono:400,500,600,700&display=swap"
         >
 
-        @viteReactRefresh
-        @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
+        @vite(['resources/css/app.css', 'resources/js/app.ts'])
         <x-inertia::head>
             <title>{{ config('app.name', 'Our Coffee') }}</title>
         </x-inertia::head>

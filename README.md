@@ -1,8 +1,10 @@
-# Our Coffee — Sistem Operasional & Point of Sale Kafe Modern
+# Our-Coffee Blade/Inertia [FORKED] — Sistem Operasional & Point of Sale Kafe Modern
+
+> **Forked Repository** dari [nocturnnnnn/Our-Coffee](https://github.com/nocturnnnnn/Our-Coffee) (versi original React 19) — dikonversi 1:1 ke **Laravel Blade (`app.blade.php`) + Inertia.js v3 + Vue 3 + Tailwind CSS v4**.
 
 **Our Coffee** adalah platform operasional kafe terpadu (_all-in-one cafe operations platform_) yang dirancang untuk menjembatani seluruh alur bisnis kedai kopi modern—mulai dari pemesanan mandiri oleh pelanggan melalui **Self-Ordering Kiosk**, pencatatan transaksi dan kasir melalui **POS Kasir**, visualisasi pesanan dapur secara real-time via **Kitchen Display System (KDS)**, monitor antrean publik (**Public Queue Display**), hingga manajemen inventaris, resep Bill of Materials (BOM), dan analisis bisnis di **Backoffice Admin**.
 
-Aplikasi ini dibangun menggunakan arsitektur modern berbasis **Laravel 13**, **Inertia.js v3**, **React 19**, **TypeScript**, **Tailwind CSS v4**, dan basis data relasional **MariaDB**.
+Aplikasi ini dibangun menggunakan arsitektur modern berbasis **Laravel 13**, **Laravel Blade**, **Inertia.js v3**, **Vue 3**, **TypeScript**, **Tailwind CSS v4**, dan basis data relasional **MariaDB**.
 
 ---
 

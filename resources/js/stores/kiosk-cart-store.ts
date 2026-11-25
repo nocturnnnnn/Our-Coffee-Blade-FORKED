@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { reactive } from 'vue';
 
 export type KioskStep =
     | 'welcome'
@@ -65,24 +65,6 @@ export type KioskCartItem = {
     }>;
 };
 
-type KioskCartState = {
-    step: KioskStep;
-    orderType: OrderTypeValue | null;
-    customerName: string;
-    items: KioskCartItem[];
-    setStep: (step: KioskStep) => void;
-    setOrderType: (orderType: OrderTypeValue) => void;
-    setCustomerName: (name: string) => void;
-    addOrUpdateItem: (
-        item: Omit<KioskCartItem, 'lineId'> & { lineId?: string },
-    ) => void;
-    updateQuantity: (lineId: string, delta: number) => void;
-    removeItem: (lineId: string) => void;
-    removeItemsByMenuIds: (menuIds: number[]) => void;
-    clearCart: () => void;
-    resetSession: () => void;
-};
-
 function makeSignature(
     menuItemId: number,
     selectedModifiers: KioskCartItem['selectedModifiers'],
@@ -95,93 +77,88 @@ function makeSignature(
     return `${menuItemId}|${modKey}|${notes.trim()}`;
 }
 
-export const useKioskCartStore = create<KioskCartState>((set) => ({
-    step: 'welcome',
-    orderType: null,
+export const kioskCartStore = reactive({
+    step: 'welcome' as KioskStep,
+    orderType: null as OrderTypeValue | null,
     customerName: '',
-    items: [],
+    items: [] as KioskCartItem[],
 
-    setStep: (step) => set({ step }),
-    setOrderType: (orderType) => set({ orderType }),
-    setCustomerName: (customerName) => set({ customerName }),
+    setStep(step: KioskStep) {
+        this.step = step;
+    },
 
-    addOrUpdateItem: (incoming) =>
-        set((state) => {
-            if (incoming.lineId) {
-                return {
-                    items: state.items.map((item) =>
-                        item.lineId === incoming.lineId
-                            ? { ...incoming, lineId: incoming.lineId }
-                            : item,
-                    ),
-                };
-            }
+    setOrderType(orderType: OrderTypeValue) {
+        this.orderType = orderType;
+    },
 
-            const sig = makeSignature(
-                incoming.menuItemId,
-                incoming.selectedModifiers,
-                incoming.notes,
+    setCustomerName(name: string) {
+        this.customerName = name;
+    },
+
+    addOrUpdateItem(
+        incoming: Omit<KioskCartItem, 'lineId'> & { lineId?: string },
+    ) {
+        if (incoming.lineId) {
+            this.items = this.items.map((item) =>
+                item.lineId === incoming.lineId
+                    ? { ...incoming, lineId: incoming.lineId! }
+                    : item,
             );
+            return;
+        }
 
-            const existing = state.items.find(
-                (item) =>
-                    makeSignature(
-                        item.menuItemId,
-                        item.selectedModifiers,
-                        item.notes,
-                    ) === sig,
-            );
+        const sig = makeSignature(
+            incoming.menuItemId,
+            incoming.selectedModifiers,
+            incoming.notes,
+        );
 
-            if (existing) {
-                return {
-                    items: state.items.map((item) =>
-                        item.lineId === existing.lineId
-                            ? {
-                                  ...item,
-                                  quantity: item.quantity + incoming.quantity,
-                              }
-                            : item,
-                    ),
-                };
-            }
+        const existing = this.items.find(
+            (item) =>
+                makeSignature(
+                    item.menuItemId,
+                    item.selectedModifiers,
+                    item.notes,
+                ) === sig,
+        );
 
-            const lineId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+        if (existing) {
+            existing.quantity += incoming.quantity;
+            return;
+        }
 
-            return {
-                items: [...state.items, { ...incoming, lineId }],
-            };
-        }),
+        const lineId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+        this.items.push({ ...incoming, lineId });
+    },
 
-    updateQuantity: (lineId, delta) =>
-        set((state) => ({
-            items: state.items
-                .map((item) =>
-                    item.lineId === lineId
-                        ? { ...item, quantity: item.quantity + delta }
-                        : item,
-                )
-                .filter((item) => item.quantity > 0),
-        })),
+    updateQuantity(lineId: string, delta: number) {
+        this.items = this.items
+            .map((item) =>
+                item.lineId === lineId
+                    ? { ...item, quantity: item.quantity + delta }
+                    : item,
+            )
+            .filter((item) => item.quantity > 0);
+    },
 
-    removeItem: (lineId) =>
-        set((state) => ({
-            items: state.items.filter((item) => item.lineId !== lineId),
-        })),
+    removeItem(lineId: string) {
+        this.items = this.items.filter((item) => item.lineId !== lineId);
+    },
 
-    removeItemsByMenuIds: (menuIds) =>
-        set((state) => ({
-            items: state.items.filter(
-                (item) => !menuIds.includes(item.menuItemId),
-            ),
-        })),
+    removeItemsByMenuIds(menuIds: number[]) {
+        this.items = this.items.filter(
+            (item) => !menuIds.includes(item.menuItemId),
+        );
+    },
 
-    clearCart: () => set({ items: [] }),
+    clearCart() {
+        this.items = [];
+    },
 
-    resetSession: () =>
-        set({
-            step: 'welcome',
-            orderType: null,
-            customerName: '',
-            items: [],
-        }),
-}));
+    resetSession() {
+        this.step = 'welcome';
+        this.orderType = null;
+        this.customerName = '';
+        this.items = [];
+    },
+});
