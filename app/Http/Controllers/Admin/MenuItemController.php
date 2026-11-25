@@ -13,6 +13,7 @@ use App\Models\MenuItemIngredient;
 use App\Models\ModifierGroup;
 use App\Services\BomCostService;
 use App\Services\MenuAvailabilityService;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -20,8 +21,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class MenuItemController extends Controller
 {
@@ -30,7 +29,7 @@ class MenuItemController extends Controller
         private readonly MenuAvailabilityService $availabilityService,
     ) {}
 
-    public function index(Request $request): Response
+    public function index(Request $request): View
     {
         $search = trim((string) $request->query('search', ''));
         $categoryId = $request->query('category_id');
@@ -117,11 +116,11 @@ class MenuItemController extends Controller
                 'cost_per_unit' => $ingredient->cost_per_unit,
             ]);
 
-        return Inertia::render('admin/menus/index', [
+        return view('admin.menus.index', [
             'menus' => $menusData,
-            'categories' => $categories,
-            'modifierGroups' => $modifierGroups,
-            'ingredients' => $ingredients,
+            'categories' => $categories->values()->all(),
+            'modifierGroups' => $modifierGroups->values()->all(),
+            'ingredients' => $ingredients->values()->all(),
             'filters' => [
                 'search' => $search,
                 'category_id' => $selectedCategoryId,

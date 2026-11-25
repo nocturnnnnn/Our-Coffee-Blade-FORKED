@@ -6,14 +6,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Distributor;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class DistributorController extends Controller
 {
-    public function index(): Response
+    public function index(): View
     {
         $distributors = Distributor::query()
             ->withCount('ingredients')
@@ -31,8 +30,8 @@ class DistributorController extends Controller
                 'ingredients_count' => (int) ($distributor->ingredients_count ?? 0),
             ]);
 
-        return Inertia::render('admin/distributors/index', [
-            'distributors' => $distributors,
+        return view('admin.distributors.index', [
+            'distributors' => $distributors->values()->all(),
         ]);
     }
 

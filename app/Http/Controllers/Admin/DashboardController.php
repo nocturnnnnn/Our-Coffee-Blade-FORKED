@@ -10,18 +10,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Ingredient;
 use App\Models\Order;
 use App\Models\OrderItem;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(Request $request): View
     {
         $days = (int) $request->query('days', 7) === 30 ? 30 : 7;
 
-        return Inertia::render('admin/dashboard', $this->buildDashboardData($days));
+        return view('admin.dashboard', $this->buildDashboardData($days));
     }
 
     public function metrics(Request $request): JsonResponse

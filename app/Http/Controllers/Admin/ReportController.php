@@ -9,14 +9,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Carbon\CarbonImmutable;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Inertia\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ReportController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(Request $request): View
     {
         [$startDate, $endDate, $startAt, $endAt] = $this->resolveDateRange($request);
 
@@ -101,7 +100,7 @@ class ReportController extends Controller
 
         usort($menuRows, fn (array $a, array $b): int => $b['revenue'] <=> $a['revenue']);
 
-        return Inertia::render('admin/reports/index', [
+        return view('admin.reports.index', [
             'filters' => [
                 'start_date' => $startDate,
                 'end_date' => $endDate,

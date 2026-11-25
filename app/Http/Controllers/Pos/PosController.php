@@ -24,12 +24,11 @@ use App\Services\AuditLogService;
 use App\Services\MenuAvailabilityService;
 use App\Services\OrderService;
 use App\Services\PinAuthorizationService;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class PosController extends Controller
 {
@@ -40,7 +39,7 @@ class PosController extends Controller
         private readonly AuditLogService $auditLogService,
     ) {}
 
-    public function index(Request $request): Response
+    public function index(Request $request): View
     {
         $user = $this->resolveUser($request);
         $shift = $user->activeShift()->firstOrFail();
@@ -124,7 +123,7 @@ class PosController extends Controller
 
         $queues = $this->loadQueues($shift);
 
-        return Inertia::render('pos/index', [
+        return view('pos.index', [
             'categories' => $catalog,
             'pendingKioskOrders' => $queues['pendingKioskOrders'],
             'recentOrders' => $queues['recentOrders'],

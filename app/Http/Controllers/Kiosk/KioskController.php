@@ -21,12 +21,11 @@ use App\Services\AuditLogService;
 use App\Services\MenuAvailabilityService;
 use App\Services\OrderService;
 use App\Services\PinAuthorizationService;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class KioskController extends Controller
 {
@@ -71,7 +70,7 @@ class KioskController extends Controller
             ));
     }
 
-    public function index(Request $request): Response
+    public function index(Request $request): View
     {
         $device = $this->resolveDevice($request);
 
@@ -156,7 +155,7 @@ class KioskController extends Controller
             ->values()
             ->all();
 
-        return Inertia::render('kiosk/index', [
+        return view('kiosk.index', [
             'device' => [
                 'id' => $device->id,
                 'name' => $device->name,

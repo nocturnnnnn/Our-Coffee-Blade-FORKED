@@ -8,17 +8,16 @@ use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
 use App\Models\AppSetting;
 use App\Models\Order;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class QueueDisplayController extends Controller
 {
-    public function index(): Response
+    public function index(): View
     {
         $feed = $this->buildFeed();
 
-        return Inertia::render('display/queue', [
+        return view('display.queue', [
             'cafeName' => AppSetting::getValue('cafe_name', 'Our Coffee') ?? 'Our Coffee',
             'preparing' => $feed['preparing'],
             'ready' => $feed['ready'],

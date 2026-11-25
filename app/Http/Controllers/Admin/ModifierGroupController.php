@@ -9,16 +9,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Ingredient;
 use App\Models\ModifierGroup;
 use App\Models\ModifierOption;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class ModifierGroupController extends Controller
 {
-    public function index(): Response
+    public function index(): View
     {
         $groups = ModifierGroup::query()
             ->with(['options.ingredient'])
@@ -60,9 +59,9 @@ class ModifierGroupController extends Controller
                 'unit' => $ingredient->unit->value,
             ]);
 
-        return Inertia::render('admin/modifiers/index', [
-            'modifierGroups' => $groups,
-            'ingredients' => $ingredients,
+        return view('admin.modifiers.index', [
+            'modifierGroups' => $groups->values()->all(),
+            'ingredients' => $ingredients->values()->all(),
         ]);
     }
 

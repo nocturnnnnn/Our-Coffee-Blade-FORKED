@@ -10,10 +10,9 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemModifier;
 use App\Services\OrderService;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class KdsController extends Controller
 {
@@ -21,9 +20,9 @@ class KdsController extends Controller
         private readonly OrderService $orderService,
     ) {}
 
-    public function index(): Response
+    public function index(): View
     {
-        return Inertia::render('kds/index', [
+        return view('kds.index', [
             'tickets' => $this->loadActiveTickets(),
             'serverTime' => now('Asia/Jakarta')->toIso8601String(),
         ]);

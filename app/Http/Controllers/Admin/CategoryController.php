@@ -6,15 +6,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class CategoryController extends Controller
 {
-    public function index(): Response
+    public function index(): View
     {
         $categories = Category::query()
             ->withCount('menuItems')
@@ -29,9 +28,11 @@ class CategoryController extends Controller
                 'sort_order' => $category->sort_order,
                 'is_active' => $category->is_active,
                 'menu_items_count' => (int) ($category->menu_items_count ?? 0),
-            ]);
+            ])
+            ->values()
+            ->all();
 
-        return Inertia::render('admin/categories/index', [
+        return view('admin.categories.index', [
             'categories' => $categories,
         ]);
     }

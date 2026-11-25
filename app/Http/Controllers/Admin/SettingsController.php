@@ -8,11 +8,10 @@ use App\Http\Controllers\Controller;
 use App\Models\AppSetting;
 use App\Models\KioskDevice;
 use App\Services\AuditLogService;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class SettingsController extends Controller
 {
@@ -20,7 +19,7 @@ class SettingsController extends Controller
         private readonly AuditLogService $auditLogService,
     ) {}
 
-    public function index(): Response
+    public function index(): View
     {
         $devices = KioskDevice::query()
             ->with('pairedBy:id,name')
@@ -36,7 +35,7 @@ class SettingsController extends Controller
                 'paired_by_name' => $device->pairedBy?->name,
             ]);
 
-        return Inertia::render('admin/settings/index', [
+        return view('admin.settings.index', [
             'settings' => [
                 'cafe_name' => AppSetting::getValue('cafe_name', 'Our Coffee') ?? 'Our Coffee',
                 'cafe_address' => AppSetting::getValue('cafe_address', '') ?? '',
@@ -47,7 +46,7 @@ class SettingsController extends Controller
                 'kiosk_confirmation_reset_seconds' => (int) (AppSetting::getValue('kiosk_confirmation_reset_seconds', '8') ?? '8'),
                 'qris_expiry_seconds' => (int) (AppSetting::getValue('qris_expiry_seconds', '300') ?? '300'),
             ],
-            'devices' => $devices,
+            'devices' => $devices->values()->all(),
         ]);
     }
 

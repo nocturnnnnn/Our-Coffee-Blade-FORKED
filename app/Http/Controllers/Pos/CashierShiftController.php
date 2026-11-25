@@ -14,10 +14,9 @@ use App\Models\Order;
 use App\Models\Payment;
 use App\Models\User;
 use App\Services\AuditLogService;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class CashierShiftController extends Controller
 {
@@ -25,7 +24,7 @@ class CashierShiftController extends Controller
         private readonly AuditLogService $auditLogService,
     ) {}
 
-    public function index(Request $request): Response
+    public function index(Request $request): View
     {
         $user = $request->user();
         if (! $user instanceof User) {
@@ -67,9 +66,9 @@ class CashierShiftController extends Controller
                 'closed_at' => $shift->closed_at?->toIso8601String(),
             ]);
 
-        return Inertia::render('pos/shift', [
+        return view('pos.shift', [
             'activeShiftDetail' => $activeShiftData,
-            'recentShifts' => $recentShifts,
+            'recentShifts' => $recentShifts->values()->all(),
         ]);
     }
 

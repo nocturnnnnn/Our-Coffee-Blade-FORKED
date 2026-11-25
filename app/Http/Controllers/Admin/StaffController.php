@@ -8,12 +8,11 @@ use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\AuditLogService;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class StaffController extends Controller
 {
@@ -21,7 +20,7 @@ class StaffController extends Controller
         private readonly AuditLogService $auditLogService,
     ) {}
 
-    public function index(): Response
+    public function index(): View
     {
         $staff = User::query()
             ->orderByRaw("CASE role WHEN 'admin' THEN 0 WHEN 'kasir' THEN 1 ELSE 2 END")
@@ -38,8 +37,8 @@ class StaffController extends Controller
                 'created_at' => $user->created_at?->toIso8601String(),
             ]);
 
-        return Inertia::render('admin/staff/index', [
-            'staff' => $staff,
+        return view('admin.staff.index', [
+            'staff' => $staff->values()->all(),
         ]);
     }
 

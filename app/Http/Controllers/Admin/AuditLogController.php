@@ -8,13 +8,12 @@ use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\User;
 use Carbon\CarbonImmutable;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class AuditLogController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(Request $request): View
     {
         $action = trim((string) $request->query('action', ''));
         $rawActorId = $request->query('actor_id');
@@ -62,10 +61,10 @@ class AuditLogController extends Controller
             ->get(['id', 'name'])
             ->map(fn (User $u): array => ['id' => $u->id, 'name' => $u->name]);
 
-        return Inertia::render('admin/audit-logs/index', [
-            'logs' => $logs,
-            'actions' => $actions,
-            'staffList' => $staffList,
+        return view('admin.audit-logs.index', [
+            'logs' => $logs->values()->all(),
+            'actions' => $actions->values()->all(),
+            'staffList' => $staffList->values()->all(),
             'filters' => [
                 'action' => $action,
                 'actor_id' => $actorId,

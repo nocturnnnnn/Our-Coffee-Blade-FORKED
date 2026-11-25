@@ -11,12 +11,11 @@ use App\Models\Distributor;
 use App\Models\Ingredient;
 use App\Models\StockMovement;
 use App\Services\InventoryService;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class InventoryController extends Controller
 {
@@ -24,7 +23,7 @@ class InventoryController extends Controller
         private readonly InventoryService $inventoryService,
     ) {}
 
-    public function index(Request $request): Response
+    public function index(Request $request): View
     {
         $filterIngredientId = $request->query('ingredient_id');
         $selectedIngredientId = is_numeric($filterIngredientId) ? (int) $filterIngredientId : null;
@@ -83,10 +82,10 @@ class InventoryController extends Controller
                 'created_at' => $movement->created_at?->toIso8601String(),
             ]);
 
-        return Inertia::render('admin/inventory/index', [
-            'ingredients' => $ingredients,
-            'distributors' => $distributors,
-            'movements' => $movements,
+        return view('admin.inventory.index', [
+            'ingredients' => $ingredients->values()->all(),
+            'distributors' => $distributors->values()->all(),
+            'movements' => $movements->values()->all(),
             'filters' => [
                 'ingredient_id' => $selectedIngredientId,
                 'type' => $selectedType,
