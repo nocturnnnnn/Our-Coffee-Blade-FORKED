@@ -1,8 +1,8 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/react-starter-kit",
+    "name": "nocturnnnnn/our-coffee-blade",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Our Coffee — All-in-one Cafe Operations & POS Platform (100% Native Laravel Blade)",
     "keywords": [
         "laravel",
         "framework"

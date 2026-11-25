@@ -1,6 +1,6 @@
 # Our Coffee — Sistem Operasional & Point of Sale Kafe Modern (100% Native Laravel Blade)
 
-> Dikonversi 1:1 menjadi **100% Native Laravel Blade** (`return view(...)` + `.blade.php`) dengan **Alpine.js 3** dan **Tailwind CSS v4** — sepenuhnya bebas dari React, Vue, Inertia.js, maupun TypeScript.
+> **Our-Coffee-Blade-FORKED** (fork dari [nocturnnnnn/Our-Coffee](https://github.com/nocturnnnnn/Our-Coffee)) — dikonversi 1:1 menjadi **100% Native Laravel Blade** (`return view(...)` + `.blade.php`) dengan **Alpine.js 3** dan **Tailwind CSS v4**, sepenuhnya bebas dari React, Vue, Inertia.js, maupun TypeScript.
 
 **Our Coffee** adalah platform operasional kafe terpadu (_all-in-one cafe operations platform_) yang dirancang untuk menjembatani seluruh alur bisnis kedai kopi modern—mulai dari pemesanan mandiri oleh pelanggan melalui **Self-Ordering Kiosk**, pencatatan transaksi dan kasir melalui **POS Kasir**, visualisasi pesanan dapur secara real-time via **Kitchen Display System (KDS)**, monitor antrean publik (**Public Queue Display**), hingga manajemen inventaris, resep Bill of Materials (BOM), dan analisis bisnis di **Backoffice Admin**.
 
@@ -231,8 +231,8 @@ Struktur basis data terdiri atas **18 tabel domain** yang mencakup: `users`, `ki
 1. **Clone Repositori & Pasang Dependensi**:
 
     ```bash
-    git clone https://github.com/nocturnnnnn/Our-Coffee.git
-    cd Our-Coffee
+    git clone https://github.com/nocturnnnnn/Our-Coffee-Blade-FORKED.git
+    cd Our-Coffee-Blade-FORKED
     composer install
     npm install
     ```

@@ -66,7 +66,7 @@ window.ocJsonRequest = async function (url, options = {}) {
         'Content-Type': 'application/json',
         'X-CSRF-TOKEN': window.ocCsrfToken(),
         'X-Requested-With': 'XMLHttpRequest',
-        ...(options.headers || {}),
+        ...options.headers,
     };
 
     const response = await fetch(url, {
@@ -305,7 +305,7 @@ Alpine.data('kioskApp', (configId) => ({
         const data = window.ocReadJsonScript(configId, {});
         this.device = data.device || {};
         this.isLocalDemo = Boolean(data.isLocalDemo);
-        this.settings = { ...this.settings, ...(data.settings || {}) };
+        this.settings = { ...this.settings, ...data.settings };
         this.categories = Array.isArray(data.categories) ? data.categories : [];
         if (this.categories.length > 0) {
             this.activeCategoryId = this.categories[0].id;
@@ -1564,9 +1564,7 @@ Alpine.data('adminMenusApp', (configId) => ({
             is_available: Boolean(menu.is_available),
             is_active: Boolean(menu.is_active),
             remove_image: false,
-            modifier_group_ids: [
-                ...(menu.modifier_group_ids || []).map(Number),
-            ],
+            modifier_group_ids: (menu.modifier_group_ids || []).map(Number),
         };
         this.modalOpen = true;
     },

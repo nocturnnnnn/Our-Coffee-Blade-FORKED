@@ -349,10 +349,8 @@ Our-Coffee/
 │       │       └── thermal-receipt.blade.php # Struk 58mm & 80mm (.thermal-receipt-print)
 │       ├── kds/index.blade.php             # Papan Kanban Barista 3 kolom + undo 1 langkah
 │       ├── display/queue.blade.php         # Monitor TV antrean publik + jam WIB
-│       ├── admin/                          # dashboard, categories, menus, modifiers, inventory,
-│       │                                   # distributors, reports, staff, audit-logs, settings
-│       ├── welcome.blade.php
-│       └── dashboard.blade.php
+│       └── admin/                          # dashboard, categories, menus, modifiers, inventory,
+│                                           # distributors, reports, staff, audit-logs, settings
 ├── routes/
 │   ├── web.php                             # Route utama Kiosk, Display, POS, KDS, & Admin
 │   └── settings.php                        # Route pengaturan profil, keamanan, & tampilan
